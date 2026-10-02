@@ -1,0 +1,33 @@
+.card-front,
+.card-back {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    backface-visibility: hidden;
+    user-select: none;
+    overflow: hidden; /* чтобы картинка не вылезала за скругления */
+}
+
+.card-front {
+    background: #3a3a5a;
+    color: #888;
+    font-size: 2.5rem;
+    font-family: 'Sniglet', sans-serif;
+}
+
+.card-back {
+    background: #ffd166;
+    transform: rotateY(180deg);
+}
+
+/* картинка заполняет всю сторону карточки */
+.card-back img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;      /* обрезает по краям, сохраняя пропорции */
+    pointer-events: none;   /* клик идёт по .card, а не по img */
+    user-select: none;
+}
