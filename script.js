@@ -7,7 +7,7 @@ let secondCard = null;
 let moves = 0;
 let matchedPairs = 0;
 
-let timeoutId = null;
+let timeOutId = null;
 
 const header = document.createElement('header');
 
@@ -100,12 +100,13 @@ cards.forEach(function(imagePath) {
 
     gameBoard.appendChild(cardElement);
 });
+
 }
 
 function restartGame() {
-    if (timeoutId) {
-        clearTimeout(timeoutId);
-        timeoutId = null;
+    if (timeOutId) {
+        clearTimeout(timeOutId);
+        timeOutId = null;
     }
 
     moves = 0;
@@ -121,6 +122,7 @@ function restartGame() {
 newGameBtn.addEventListener('click', restartGame);
 
 initGame();
+
 
 function flipCard() {
     if (lockBoard) return;
@@ -160,6 +162,10 @@ function disableCards() {
     pairsSpan.textContent = `Pairs Matched: ${matchedPairs} | 8`;
 
     resetBoard();
+
+    if (matchedPairs === 8) {
+        setTimeout(WinModal, 500);
+    }
 }
 
 function unflipCards() {
@@ -171,7 +177,7 @@ function unflipCards() {
         }
 
         resetBoard();
-        timeoutId = null;
+        timeOutId = null;
     }, 1200);
 }
 
@@ -180,13 +186,45 @@ function resetBoard() {
     [firstCard, secondCard] = [null, null];
 }
 
-function showInModal() {
+function openModal(contentElement) {
+    document.body.style.overflow = 'hidden';
 
-const modalContainer = document.createElement('div');
-modalContainer.classList.add('modal-container');
+    const modalContainer = document.createElement('div');
+    modalContainer.classList.add('modal-container');
 
-const modalWindow = document.createElement('div');
-modalWindow.classList.add('modal');
+    const modalWindow = document.createElement('div');
+    modalWindow.classList.add('modal');
+
+    modalWindow.appendChild(contentElement);
+    modalContainer.appendChild(modalWindow);
+    document.body.appendChild(modalContainer);
+
+function closeModal() {
+        modalContainer.remove();
+        document.body.style.overflow = 'auto';
+        document.removeEventListener('keydown', handleEsc);
+    }
+
+    modalContainer.addEventListener('click', (event) => {
+        if (event.target === modalContainer) {
+            closeModal();
+        }
+    });
+
+    function handleEsc(event) {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+    }
+    document.addEventListener('keydown', handleEsc);
+
+    return closeModal;
+}
+
+function WinModal() {
+
+const winContainer = document.createElement('div');
+winContainer.classList.add('win-container');
 
 const winText = document.createElement('h2');
 winText.textContent = 'Congradulations on your win!';
@@ -204,28 +242,102 @@ modalBtn.classList.add('modal-buttons');
 const modalNewGameBtn = document.createElement('button');
 modalNewGameBtn.textContent = 'New Game';
 
-modalNewGameBtn.addEventListener('click', () => {
-restartGame();
-modalContainer.remove();
-});
-
 const closeBtn = document.createElement('button');
 closeBtn.textContent = 'Close';
-
-closeBtn.addEventListener('click',() => {
-modalContainer.remove();
-});
 
 modalBtn.appendChild(modalNewGameBtn);
 modalBtn.appendChild(closeBtn);
 
-modalWindow.appendChild(winText);
-modalWindow.appendChild(happyCat);
-modalWindow.appendChild(result);
-modalWindow.appendChild(modalBtn);
+winContainer.appendChild(winText);
+winContainer.appendChild(happyCat);
+winContainer.appendChild(result);
+winContainer.appendChild(modalBtn);
 
-modalContainer.appendChild(modalWindow);
+const closeThisModal = openModal(winContainer);
 
-document.body.appendChild(modalContainer);
+ modalNewGameBtn.addEventListener('click', () => {
+        restartGame();
+        closeThisModal();
+    });
+
+    closeBtn.addEventListener('click', () => {
+        closeThisModal(); //
+    });
 }
+
+function saveToLeaderBoard () {
+let leaderBoard = JSON.parse(localStorage.getItem('memoryGameLeaders')) || [];
+
+const now = new Date();
+const day = String(now.getDate());
+const month = String(now.getMonth() + 1).padStart(2, '0');
+const year = now.getFullYear();
+const formattedDate = `${day}.${month}.${year}`;
+
+leaderBoard.push({
+name: 'Player',
+steps: steps,
+date: formattedDate,
+timestamp: Date.now()
+});
+
+leaderBoard.sort((a, b) => {
+        if (a.steps !== b.steps) {
+            return a.steps - b.steps;
+        }
+        return a.timestamp - b.timestamp;
+    });
+
+    leaderBoard = leaderBoard.slice(0, 10);
+
+    localStorage.setItem('memoryGameLeaders', JSON.stringify(leaderBoard));
+}
+
+function showLeaderboardModal() {
+
+    const leaderContent = document.createElement('div');
+    leaderContent.classList.add('leader-content');
+
+    const title = document.createElement('h2');
+    title.textContent = ' Leaderboard ';
+
+    const leadersList = document.createElement('div');
+    leadersList.classList.add('leaders-list');
+
+    const leaderBoard = JSON.parse(localStorage.getItem('memoryGameLeaders')) || [];
+
+    if (leaderBoard.length === 0) {
+
+        const emptyText = document.createElement('p');
+        emptyText.classList.add('empty-leaderboard-text');
+        emptyText.textContent = 'No scores yet';
+        leadersList.appendChild(emptyText);
+    } else {
+
+        leaderBoard.forEach((player, index) => {
+            const playerRow = document.createElement('div');
+            playerRow.classList.add('leader-row');
+            playerRow.textContent = `${index + 1}. ${player.name} — ${player.steps} steps (${player.date})`;
+            leadersList.appendChild(playerRow);
+        });
+    }
+
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = 'Close';
+    closeBtn.classList.add('modal-btn', 'secondary');
+
+    leaderContent.appendChild(title);
+    leaderContent.appendChild(leadersList);
+    leaderContent.appendChild(closeBtn);
+
+    const closeThisModal = openModal(leaderContent);
+
+    closeBtn.addEventListener('click', () => {
+        closeThisModal();
+    });
+}
+
+leaderBtn.addEventListener('click', showLeaderboardModal);
+
+
 
