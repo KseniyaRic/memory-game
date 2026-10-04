@@ -51,4 +51,31 @@ const images = [
 
 let cards = [...images,...images];
 
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+shuffle(cards);
+
+cards.forEach(function(imagePath) {
+    const cardElement = document.createElement('div');
+    cardElement.classList.add('card');
+
+    cardElement.dataset.img = imagePath;
+
+    const cardImg = document.createElement('img');
+    cardImg.src = imagePath;
+    cardImg.classList.add('card-front');
+
+    const cardBack = document.createElement('div');
+    cardBack.classList.add('card-back');
+
+    cardElement.appendChild(cardImg);
+    cardElement.appendChild(cardBack);
+
+    gameBoard.appendChild(cardElement);
+});
 

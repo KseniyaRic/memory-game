@@ -49,11 +49,42 @@ cursor: pointer;
 }
 .game-board {
     display: grid;
-    grid-template-columns: repeat(4, 100px);
-    grid-template-rows: repeat(4, 100px);
+    grid-template-columns: repeat(4, 200px);
+    grid-template-rows: repeat(4, 200px);
     gap: 10px;
     background-color: aliceblue;
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(223, 237, 243, 0.1);
+}
+
+.card {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+.card:hover {
+    transform: scale(1.04);
+}
+.card-front {
+width: 100%;
+height: 100%;
+object-fit: cover;
+border-radius: 8px;
+display: none;
+}
+.card-back {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+border-radius: 8px;
+background-image: url('img/back_card.JPG');
+background-size: cover;
+background-position: center;
 }
