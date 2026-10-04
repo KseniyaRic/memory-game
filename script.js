@@ -265,11 +265,11 @@ const closeThisModal = openModal(winContainer);
     });
 }
 
-function saveToLeaderBoard () {
+function saveToLeaderBoard (steps) {
 let leaderBoard = JSON.parse(localStorage.getItem('memoryGameLeaders')) || [];
 
 const now = new Date();
-const day = String(now.getDate());
+const day = String(now.getDate()).padStart(2, '0');
 const month = String(now.getMonth() + 1).padStart(2, '0');
 const year = now.getFullYear();
 const formattedDate = `${day}.${month}.${year}`;
@@ -338,6 +338,4 @@ function showLeaderboardModal() {
 }
 
 leaderBtn.addEventListener('click', showLeaderboardModal);
-
-
 
