@@ -7,7 +7,8 @@ let secondCard = null;
 let moves = 0;
 let matchedPairs = 0;
 
-//Базовый каркас
+let timeoutId = null;
+
 const header = document.createElement('header');
 
 const GameName = document.createElement ('h1')
@@ -48,7 +49,6 @@ main.appendChild(gameBoard);
 document.body.appendChild(header);
 document.body.appendChild(main);
 
-//Массив
 const images = [
 'img/cat.jpg',
 'img/dog.jpg',
@@ -62,8 +62,11 @@ const images = [
 
 let cards = [...images,...images];
 
-//Логика
-//Перемешивания Фишера-Йейтса
+function initGame() {
+while (gameBoard.firstChild) {
+gameBoard.removeChild(gameBoard.firstChild);
+}
+
 function shuffle(array) {
 let i =array.length, j, k;
 while (i) {
@@ -75,7 +78,8 @@ array[k] = j;
 return array
 }
 
-// Карты со спиной+переворот
+shuffle(cards);
+
 cards.forEach(function(imagePath) {
     const cardElement = document.createElement('div');
     cardElement.classList.add('card');
@@ -92,9 +96,32 @@ cards.forEach(function(imagePath) {
     cardElement.appendChild(cardImg);
     cardElement.appendChild(cardBack);
 
-    gameBoard.appendChild(cardElement);
     cardElement.addEventListener('click', flipCard);
+
+    gameBoard.appendChild(cardElement);
 });
+}
+
+function restartGame() {
+    if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+    }
+
+    moves = 0;
+    matchedPairs = 0;
+    resetBoard();
+
+    movesSpan.textContent = 'Steps: 0';
+    pairsSpan.textContent = 'Pairs Matched: 0 | 8';
+
+        initGame();
+}
+
+newGameBtn.addEventListener('click', restartGame);
+
+initGame();
+
 function flipCard() {
     if (lockBoard) return;
 
@@ -137,12 +164,15 @@ function disableCards() {
 
 function unflipCards() {
     lockBoard = true;
-    setTimeout(() => {
+    timeOutId = setTimeout(() => {
+        if (firstCard && secondCard) {
         firstCard.classList.remove('flip');
         secondCard.classList.remove('flip');
+        }
 
         resetBoard();
-    }, 1000);
+        timeoutId = null;
+    }, 1200);
 }
 
 function resetBoard() {
