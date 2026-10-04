@@ -179,3 +179,53 @@ function resetBoard() {
     [hasFlippedCard, lockBoard] = [false, false];
     [firstCard, secondCard] = [null, null];
 }
+
+function showInModal() {
+
+const modalContainer = document.createElement('div');
+modalContainer.classList.add('modal-container');
+
+const modalWindow = document.createElement('div');
+modalWindow.classList.add('modal');
+
+const winText = document.createElement('h2');
+winText.textContent = 'Congradulations on your win!';
+
+const happyCat = document.createElement('img')
+happyCat.src="img/happy-cat-happy-happy-cat.gif"
+happyCat.classList.add('gif');
+
+const result = document.createElement('p')
+result.textContent = `You made it in ${moves} steps!`;
+
+const modalBtn = document.createElement('div');
+modalBtn.classList.add('modal-buttons');
+
+const modalNewGameBtn = document.createElement('button');
+modalNewGameBtn.textContent = 'New Game';
+
+modalNewGameBtn.addEventListener('click', () => {
+restartGame();
+modalContainer.remove();
+});
+
+const closeBtn = document.createElement('button');
+closeBtn.textContent = 'Close';
+
+closeBtn.addEventListener('click',() => {
+modalContainer.remove();
+});
+
+modalBtn.appendChild(modalNewGameBtn);
+modalBtn.appendChild(closeBtn);
+
+modalWindow.appendChild(winText);
+modalWindow.appendChild(happyCat);
+modalWindow.appendChild(result);
+modalWindow.appendChild(modalBtn);
+
+modalContainer.appendChild(modalWindow);
+
+document.body.appendChild(modalContainer);
+}
+

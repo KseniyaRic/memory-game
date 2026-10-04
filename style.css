@@ -20,7 +20,7 @@ header {
     align-items: center;
 }
 h1 {
-font-size: 70px;
+font-size: 65px;
 font-weight: 800;
 color: rgb(172, 46, 37);
 margin: 0;
@@ -33,27 +33,38 @@ gap: 300px;
 .score {
 display: flex;
 flex-direction: row;
-gap: 10px;
+gap: 30px;
 font-size: 18px;
 font-weight: 400;
-color: rgb(100, 40, 40);;
+color: rgb(100, 40, 40);
+border: 1px solid rgb(100, 40, 40);
+border-radius: 50px;
+background-color:  rgb(233, 222, 201);
+padding: 10px;
 }
+
 button {
 padding: 10px 20px;
 font-size: 20px;
-font-weight: 600;
+font-weight: 400;
 background-color: rgb(100, 40, 40);
 border: 1px solid rgb(100, 40, 40);
 border-radius: 50px;
 color: rgb(233, 222, 201);
 cursor: pointer;
 }
+button:hover{
+background-color: rgb(233, 222, 201);
+color: rgb(100, 40, 40);
+}
 .game-board {
     display: grid;
     grid-template-columns: repeat(4, 150px);
     grid-template-rows: repeat(4, 150px);
     gap: 10px;
+    border: 1px solid rgb(100, 40, 40);
     background-color: rgb(233, 222, 201);
+
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(223, 237, 243, 0.1);
