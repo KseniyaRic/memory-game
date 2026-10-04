@@ -1,33 +1,18 @@
-.card-front,
-.card-back {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    backface-visibility: hidden;
-    user-select: none;
-    overflow: hidden; /* чтобы картинка не вылезала за скругления */
+body {
+background-image: url(/img/background.jpg);
+width: 100%;
+height: 100%;
+font-family: 'Sniglet', sans-serif;
+margin: 0 auto;
+padding: 20px;
+display: flex;
+flex-direction: column;
+align-items: center;
 }
-
-.card-front {
-    background: #3a3a5a;
-    color: #888;
-    font-size: 2.5rem;
-    font-family: 'Sniglet', sans-serif;
-}
-
-.card-back {
-    background: #ffd166;
-    transform: rotateY(180deg);
-}
-
-/* картинка заполняет всю сторону карточки */
-.card-back img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;      /* обрезает по краям, сохраняя пропорции */
-    pointer-events: none;   /* клик идёт по .card, а не по img */
-    user-select: none;
+/*
+.check{
+font-size: 100px;
+font-weight: 800;
+color: rgb(202, 57, 57);
+margin: 0;
 }
