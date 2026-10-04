@@ -1,3 +1,13 @@
+// Глобальные переменные состояния
+let hasFlippedCard = false;
+let lockBoard = false;
+let firstCard = null;
+let secondCard = null;
+
+let moves = 0;
+let matchedPairs = 0;
+
+//Базовый каркас
 const header = document.createElement('header');
 
 const GameName = document.createElement ('h1')
@@ -38,6 +48,7 @@ main.appendChild(gameBoard);
 document.body.appendChild(header);
 document.body.appendChild(main);
 
+//Массив
 const images = [
 'img/cat.jpg',
 'img/dog.jpg',
@@ -51,15 +62,20 @@ const images = [
 
 let cards = [...images,...images];
 
+//Логика
+//Перемешивания Фишера-Йейтса
 function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
+let i =array.length, j, k;
+while (i) {
+k = Math.floor(Math.random() * i--);
+j = array[i];
+array[i] = array[k];
+array[k] = j;
+}
+return array
 }
 
-shuffle(cards);
-
+// Карты со спиной+переворот
 cards.forEach(function(imagePath) {
     const cardElement = document.createElement('div');
     cardElement.classList.add('card');
@@ -77,5 +93,59 @@ cards.forEach(function(imagePath) {
     cardElement.appendChild(cardBack);
 
     gameBoard.appendChild(cardElement);
+    cardElement.addEventListener('click', flipCard);
 });
+function flipCard() {
+    if (lockBoard) return;
 
+    if (this === firstCard) return;
+
+    this.classList.add('flip');
+
+    if (!hasFlippedCard) {
+        hasFlippedCard = true;
+        firstCard = this;
+        return;
+    }
+    secondCard = this;
+
+    checkForMatch();
+}
+    function checkForMatch() {
+
+        let isMatch = firstCard.dataset.img === secondCard.dataset.img;
+
+    moves++;
+    movesSpan.textContent = `Steps: ${moves}`;
+
+    if (isMatch) {
+        disableCards();
+    } else {
+        unflipCards();
+    }
+}
+
+function disableCards() {
+    firstCard.removeEventListener('click', flipCard);
+    secondCard.removeEventListener('click', flipCard);
+
+    matchedPairs++;
+    pairsSpan.textContent = `Pairs Matched: ${matchedPairs} | 8`;
+
+    resetBoard();
+}
+
+function unflipCards() {
+    lockBoard = true;
+    setTimeout(() => {
+        firstCard.classList.remove('flip');
+        secondCard.classList.remove('flip');
+
+        resetBoard();
+    }, 1000);
+}
+
+function resetBoard() {
+    [hasFlippedCard, lockBoard] = [false, false];
+    [firstCard, secondCard] = [null, null];
+}
