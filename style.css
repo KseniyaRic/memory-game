@@ -80,13 +80,15 @@ color: rgb(100, 40, 40);
     cursor: pointer;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
+    transition: transform 0.5s ease;
+
 }
 
 .card:hover {
     transform: scale(1.04);
 }
 .card-front {
+position: absolute;
 width: 100%;
 height: 100%;
 object-fit: cover;
@@ -106,6 +108,7 @@ background-position: center;
 }
 .card.flip .card-front {
     display: block;
+
 }
 .card.flip .card-back {
     display: none;
