@@ -1,4 +1,3 @@
-// Глобальные переменные состояния
 let hasFlippedCard = false;
 let lockBoard = false;
 let firstCard = null;
@@ -54,7 +53,7 @@ const images = [
 'img/dog.jpg',
 'img/dog2.jpg',
 'img/fish.jpg',
-'img/hourse.jpg',
+'img/horse.jpg',
 'img/monkey.jpg',
 'img/mouse.jpg',
 'img/sad.jpg',
@@ -190,6 +189,9 @@ function resetBoard() {
 }
 
 function openModal(contentElement) {
+    if (document.querySelector('.modal-container')) {
+        return;
+    }
     document.body.style.overflow = 'hidden';
 
     const modalContainer = document.createElement('div');
@@ -230,7 +232,7 @@ const winContainer = document.createElement('div');
 winContainer.classList.add('win-container');
 
 const winText = document.createElement('h2');
-winText.textContent = 'Congradulations on your win!';
+winText.textContent = 'Congratulations on your win!';
 
 const happyCat = document.createElement('img')
 happyCat.src="img/happy-cat-happy-happy-cat.gif"
