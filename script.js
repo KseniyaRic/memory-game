@@ -164,6 +164,9 @@ function disableCards() {
     resetBoard();
 
     if (matchedPairs === 8) {
+
+        saveToLeaderBoard(moves);
+
         setTimeout(WinModal, 500);
     }
 }
